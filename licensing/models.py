@@ -8,7 +8,7 @@ class User(Base):
     __tablename__ = "users"
     username = Column(String(64), primary_key=True, index=True)
     uuid = Column(String(36), unique=True, default=lambda: str(uuid4()), nullable=False)
-    password_hash = Column(String(128), nullable=False)
+    password_hash = Column(String(256), nullable=False)
     has_active_license = Column(Boolean, default=False, nullable=False)
     created_at = Column(DateTime, default=datetime.now, nullable=False)
     licenses = relationship("License", back_populates="user")
