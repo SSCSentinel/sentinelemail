@@ -31,7 +31,7 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depend
         raise HTTPException(status_code=401, detail="Incorrect username or password")
     access_token = create_access_token({"sub": user.username})
     # Log login
-    models.LoginLog(username=user.username, ip_address="") # Optionally log IP here
+    models.LoginLog(username=user.username)
     return {"access_token": access_token}
 
 @app.post("/license/check", response_model=schemas.LicenseInfo)
@@ -51,7 +51,6 @@ def check_license(data: schemas.LicenseCheck, db: Session = Depends(get_db)):
 
 @app.post("/license/activate", response_model=schemas.LicenseInfo)
 def activate_license(username: str, db: Session = Depends(get_db)):
-    # This would be called after purchase, e.g. admin or payment webhook
     lic = crud.activate_full_license(db, username)
     return schemas.LicenseInfo(
         license_type=lic.license_type,
